@@ -1,7 +1,12 @@
 'use strict';
+var _ = require('lodash');
 var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-generator').test;
+
+function getModuleDirName() {
+  return _.camelCase(process.cwd().split(path.sep).pop());
+}
 
 describe('node:cli', function () {
   before(function (done) {
@@ -18,6 +23,10 @@ describe('node:cli', function () {
   it('Extends package.json', function () {
     assert.fileContent('package.json', '"bin": "dist/cli.js"');
     assert.fileContent('package.json', '"meow"');
+  });
+
+  it('Uses module name in cli.js', function() {
+    assert.fileContent('lib/cli.js', getModuleDirName());
   });
 
   describe('--no-babel', function () {
